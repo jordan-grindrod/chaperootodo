@@ -9,20 +9,29 @@ const express = require('express');
 const app = express();
 const port = 8080;
 const bodyParser = require('body-parser');
-
 app.use(bodyParser.json());
 
-app.get("/", (req, res) =>{
-    res.send("Test Connection Succesful");
-})
+
+function checkConnection(){
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected to Database 'chaperootodo'!");
+    });
+}
+checkConnection();
+
 
 app.listen(port, () => {
     console.log(`Server Listening on Port: ${port}`);
 })
 
+app.get("/", (req, res) =>{
+    res.send("Chaperoo To Do API");
+})
+
 app.post("/task/insertone", (req, res) =>{
     let task = req.body;
-    let query = `INSERT INTO todo (task, due_date, category, status) VALUES ('${task.task}', '${task.due_date}', '${task.category}', '${task.status}')`;
+    let query = `INSERT INTO todo (task, due_date, category, status) VALUES ('${task.task}', '${task.due_date}', '${task.category}', 'pending')`;
     con.query(query, function(err){
         if (err) {
             console.error(err);
@@ -36,27 +45,19 @@ app.post("/task/insertone", (req, res) =>{
     });
 })
 
-
-function checkConnection(){
-    con.connect(function(err) {
-        if (err) throw err;
-        console.log("Connected to Database 'chaperootodo'!");
+app.get("/task/gettasks", (req, res) =>{
+    let query = "SELECT * FROM todo";
+    con.query(query, function(err, result) {
+        if (err){
+            console.error(err);
+            res.statusCode = 500;
+            res.send("Could not obtain data");
+        }
+        else{
+            res.statusCode = 200;
+            res.send(result);
+        }
     });
-}
+})
 
-function insertRecord(){
-    let sqlQuery = "INSERT INTO todo (task, status) VALUES ('Play Football','pending')"; 
-    
-    con.query(sqlQuery, function(err) {
-        if (err) throw err;
-        console.log("1 record inserted");
-    });
-}
-
-function selectAll(){
-    con.query("SELECT * FROM todo", function(err, result) {
-        if (err) throw err;
-        console.log(result);
-    });
-}
-
+//user needs to be able to delete tasks
