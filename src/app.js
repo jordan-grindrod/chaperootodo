@@ -60,4 +60,21 @@ app.get("/task/gettasks", (req, res) =>{
     });
 })
 
-//user needs to be able to delete tasks
+app.put("/task/deleteone", (req, res) =>{
+    let task = req.body;
+    let query = `DELETE FROM todo WHERE task_id="${task.task_id}"`;
+    con.query(query, function (err){
+        if (err) {
+            console.error(er);
+            res.statusCode = 500;
+            res.send("Could not delete task");
+        }
+        else {
+            res.statusCode = 200;
+            res.send("1 record deleted");
+        }
+    });
+})
+
+
+//user needs to be able to move task from pending to complete
