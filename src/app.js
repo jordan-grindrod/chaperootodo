@@ -7,7 +7,7 @@ const con = mysql.createConnection({
 });
 const express = require('express');
 const app = express();
-const port = 8080;
+const port = 3000;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
@@ -60,12 +60,12 @@ app.get("/task/gettasks", (req, res) =>{
     });
 })
 
-app.put("/task/deleteone", (req, res) =>{
+app.delete("/task/deleteone", (req, res) =>{
     let task = req.body;
     let query = `DELETE FROM todo WHERE task_id="${task.task_id}"`;
     con.query(query, function (err){
         if (err) {
-            console.error(er);
+            console.error(err);
             res.statusCode = 500;
             res.send("Could not delete task");
         }
@@ -76,5 +76,34 @@ app.put("/task/deleteone", (req, res) =>{
     });
 })
 
+app.put("/task/status", (req,res) =>{
+    let task = req.body;
+    let query = `UPDATE todo SET status="${task.status}" WHERE task_id="${task.task_id}"`;
+    con.query(query, function (err){
+        if (err) {
+            console.error(err);
+            res.statusCode = 500;
+            res.send("Could not update task status");
+        }
+        else {
+            res.statusCode = 200;
+            res.send("1 record updated");
+        }
+    });
+})
 
-//user needs to be able to move task from pending to complete
+app.put("/task/edittask", (req,res) =>{
+    let task = req.body;
+    let query = `UPDATE todo SET task="${task.task}" WHERE task_id="${task.task_id}"`;
+    con.query(query, function (err){
+        if (err) {
+            console.error(err);
+            res.statusCode = 500;
+            res.send("Could not edit task");
+        }
+        else {
+            res.statusCode = 200;
+            res.send("1 record updated");
+        }
+    });
+})
