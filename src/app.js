@@ -31,7 +31,6 @@ app.get("/", (req, res) =>{
 
 app.post("/task/insertone", (req, res) =>{
     let task = req.body;
-    // let query = `INSERT INTO todo (task, due_date, category, status) VALUES ('${task.task}', '${task.due_date}', '${task.category}', 'pending')`;
     let query = `INSERT INTO todo (task, status) VALUES ('${task.task}', 'pending')`;
     con.query(query, function(err){
         if (err) {
