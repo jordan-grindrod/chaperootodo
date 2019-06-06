@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const con = mysql.createConnection({
-    host: "localhost",
+    host: "chaperoo-db",
     user: 'root',
     password: 'password',
     database: 'chaperootodo'
