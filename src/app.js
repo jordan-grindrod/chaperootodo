@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const mySqlOpts = {
     host: "chaperoo-db",
     user: 'root',
-    password: 'password',
+    password: process.env.DB_PASSWORD,
     database: 'chaperootodo'
     }   
 const express = require('express');

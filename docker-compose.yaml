@@ -6,9 +6,11 @@ services:
     ports: 
       - target: 3000
         published: 3000
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
     depends_on: 
       - chaperoo-db
   chaperoo-db:
     image: jordangrindrod/chaperoo-db
     environment: 
-     - MYSQL_ROOT_PASSWORD=password
+     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
